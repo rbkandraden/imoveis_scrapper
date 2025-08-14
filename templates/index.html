@@ -13,10 +13,28 @@
 </head>
 <body>
     <h1>Imóveis OLX</h1>
-    <button onclick="buscarImoveis()">Buscar imóveis</button>
+        melhoria: robustez do scraper OLX e base para webapp        <form id="form-busca" onsubmit="buscarImoveis(event)">
+            <label>
+                Cidade:
+                <input type="text" id="cidade" name="cidade" required placeholder="Ex: petrolina">
+            </label>
+            <label>
+                Estado:
+                <input type="text" id="estado" name="estado" maxlength="2" required placeholder="Ex: pe">
+            </label>
+            <label>
+                Preço máximo:
+                <input type="number" id="max_preco" name="max_preco" required placeholder="Ex: 900">
+            </label>
+            <button type="submit">Buscar imóveis</button>
+        </form>
     <div id="imoveis"></div>
     <script>
-        async function buscarImoveis() {
+            async function buscarImoveis(event) {
+                if (event) event.preventDefault();
+                const cidade = document.getElementById('cidade').value;
+                const estado = document.getElementById('estado').value;
+                const max_preco = document.getElementById('max_preco').value;
             document.getElementById('imoveis').innerHTML = 'Carregando...';
             const resp = await fetch('/imoveis/olx');
             const data = await resp.json();
