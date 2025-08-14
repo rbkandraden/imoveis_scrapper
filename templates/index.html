@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Imóveis OLX</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 2em; }
+        .imovel { border: 1px solid #ccc; padding: 1em; margin-bottom: 1em; border-radius: 8px; }
+        .titulo { font-weight: bold; font-size: 1.2em; }
+        .preco { color: green; font-weight: bold; }
+        .link { text-decoration: none; color: #0077cc; }
+    </style>
+</head>
+<body>
+    <h1>Imóveis OLX</h1>
+    <button onclick="buscarImoveis()">Buscar imóveis</button>
+    <div id="imoveis"></div>
+    <script>
+        async function buscarImoveis() {
+            document.getElementById('imoveis').innerHTML = 'Carregando...';
+            const resp = await fetch('/imoveis/olx');
+            const data = await resp.json();
+            if (data.length === 0) {
+                document.getElementById('imoveis').innerHTML = 'Nenhum imóvel encontrado.';
+                return;
+            }
+            document.getElementById('imoveis').innerHTML = data.map(imovel => `
+                <div class="imovel">
+                    <div class="titulo">${imovel.titulo}</div>
+                    <div class="preco">${imovel.preco}</div>
+                    <div><a class="link" href="${imovel.link}" target="_blank">Ver anúncio</a></div>
+                    <div>${imovel.descricao || ''}</div>
+                </div>
+            `).join('');
+        }
+    </script>
+</body>
+</html>
